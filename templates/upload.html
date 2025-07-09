@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Image</title>
+    <style>
+        :root {
+            --beige: #F5F5DC;
+            --warm-beige: #E6D5B8;
+            --dark-beige: #D2B48C;
+            --accent: #FF9E7D;
+            --text: #5A4A42;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--beige), var(--warm-beige));
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            color: var(--text);
+        }
+
+        .smileys {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .smiley {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: float linear infinite;
+            opacity: 0.7;
+            text-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(0.8);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        .upload-box {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            width: 450px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(90, 74, 66, 0.1);
+            border: 1px solid rgba(210, 180, 140, 0.3);
+            backdrop-filter: blur(5px);
+            transform-style: preserve-3d;
+            transform: perspective(500px);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: perspective(500px) translateY(20px) rotateX(5deg);
+            }
+            to {
+                opacity: 1;
+                transform: perspective(500px) translateY(0) rotateX(0);
+            }
+        }
+
+        .upload-box:hover {
+            transform: perspective(500px) translateY(-5px) rotateX(2deg);
+            box-shadow: 0 20px 40px rgba(90, 74, 66, 0.15);
+        }
+
+        .upload-box h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--text);
+            position: relative;
+            display: inline-block;
+        }
+
+        .upload-box h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 3px;
+        }
+
+        .upload-box p {
+            font-size: 1rem;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            color: var(--text);
+        }
+
+        .file-input {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .file-input input[type="file"] {
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -1;
+        }
+
+        .file-input label {
+            display: inline-block;
+            padding: 15px 30px;
+            background: rgba(255, 158, 125, 0.1);
+            border: 2px dashed var(--accent);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-input label:hover {
+            background: rgba(255, 158, 125, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .file-input label:active {
+            transform: translateY(0);
+        }
+
+        .btn {
+            background: linear-gradient(45deg, var(--accent), #FFB347);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 158, 125, 0.4);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 158, 125, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::after {
+            left: 100%;
+        }
+
+        .logout {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: var(--text);
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            z-index: 2;
+        }
+
+        .logout:hover {
+            color: var(--accent);
+        }
+
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.7);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(2.5);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="smileys" id="smileys"></div>
+    
+    <a href="/logout" class="logout">Logout</a>
+    
+    <div class="upload-box">
+        <h2>📁 Upload Your Image</h2>
+        <p>Welcome to our creative space! Share your vision with us.<br>Let's make something beautiful together! ✨</p>
+        
+        <form method="POST" enctype="multipart/form-data">
+            <div class="file-input">
+                <input type="file" name="image" id="file" required>
+                <label for="file">Choose a file</label>
+            </div>
+            
+            <button type="submit" class="btn">Upload 🚀</button>
+        </form>
+    </div>
+
+    <script>
+        // Create floating smiley faces
+        const smileysContainer = document.getElementById('smileys');
+        const smileyCount = 20;
+        const smileyEmojis = ['😊', '😄', '😍', '🤩', '🥰', '😎', '🤗', '😇', '🤠', '🥳'];
+        
+        for (let i = 0; i < smileyCount; i++) {
+            const smiley = document.createElement('div');
+            smiley.classList.add('smiley');
+            
+            // Random emoji
+            const randomEmoji = smileyEmojis[Math.floor(Math.random() * smileyEmojis.length)];
+            smiley.textContent = randomEmoji;
+            
+            // Random size between 1rem and 2.5rem
+            const size = Math.random() * 1.5 + 1;
+            smiley.style.fontSize = `${size}rem`;
+            
+            // Random position
+            smiley.style.left = `${Math.random() * 100}vw`;
+            
+            // Random animation duration and delay
+            const duration = Math.random() * 15 + 10;
+            const delay = Math.random() * 5;
+            smiley.style.animationDuration = `${duration}s`;
+            smiley.style.animationDelay = `${delay}s`;
+            
+            smileysContainer.appendChild(smiley);
+        }
+
+        // Add ripple effect to button
+        const button = document.querySelector('.btn');
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const ripple = document.createElement('span');
+            ripple.classList.add('ripple');
+            this.appendChild(ripple);
+            
+            const x = e.clientX - e.target.getBoundingClientRect().left;
+            const y = e.clientY - e.target.getBoundingClientRect().top;
+            
+            ripple.style.left = `${x}px`;
+            ripple.style.top = `${y}px`;
+            
+            setTimeout(() => {
+                ripple.remove();
+                // Submit the form after animation
+                this.closest('form').submit();
+            }, 600);
+        });
+
+        // Style file input
+        const fileInput = document.getElementById('file');
+        fileInput.addEventListener('change', function() {
+            const fileName = this.files[0]?.name || 'No file chosen';
+            const label = this.nextElementSibling;
+            label.textContent = fileName;
+            label.style.borderStyle = 'solid';
+            label.style.backgroundColor = 'rgba(255, 158, 125, 0.2)';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        :root {
+            --dark-blue: #0a192f;
+            --navy: #172a45;
+            --light-navy: #303f60;
+            --lightest-navy: #465880;
+            --slate: #8892b0;
+            --light-slate: #a8b2d1;
+            --lightest-slate: #ccd6f6;
+            --white: #e6f1ff;
+            --green: #64ffda;
+            --purple: #7d53ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Calibre', 'Inter', 'San Francisco', 'SF Pro Text', -apple-system, system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to bottom, #000428, #004e92);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .night-sky {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background-color: var(--white);
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite ease-in-out;
+            opacity: 0;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: var(--opacity); }
+        }
+
+        .shooting-star {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,1));
+            border-radius: 50%;
+            animation: shoot var(--shoot-duration) linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes shoot {
+            0% {
+                transform: translateX(0) translateY(0);
+                opacity: 1;
+            }
+            70% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(var(--shoot-distance-x)) translateY(var(--shoot-distance-y));
+                opacity: 0;
+            }
+        }
+
+        .mountains {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 30%;
+            background: linear-gradient(to top, #0a192f, transparent);
+            z-index: 1;
+        }
+
+        .mountain {
+            position: absolute;
+            bottom: 0;
+            background: linear-gradient(to top, #0a192f, #172a45);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .login-box {
+            position: relative;
+            z-index: 2;
+            background: rgba(10, 25, 47, 0.8);
+            padding: 40px;
+            border-radius: 15px;
+            width: 380px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(100, 255, 218, 0.1);
+            backdrop-filter: blur(10px);
+            transform-style: preserve-3d;
+            transform: perspective(500px);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: perspective(500px) translateY(20px) rotateX(10deg);
+            }
+            to {
+                opacity: 1;
+                transform: perspective(500px) translateY(0) rotateX(0);
+            }
+        }
+
+        .login-box:hover {
+            transform: perspective(500px) translateY(-5px) rotateX(2deg);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+        }
+
+        h2 {
+            color: var(--green);
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+            position: relative;
+            display: inline-block;
+            text-shadow: 0 0 10px rgba(100, 255, 218, 0.3);
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 2px;
+            background: var(--green);
+            border-radius: 3px;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 1px solid var(--light-navy);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: rgba(23, 42, 69, 0.5);
+            color: var(--lightest-slate);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--green);
+            box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.2);
+        }
+
+        label {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            color: var(--slate);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            background: var(--navy);
+            padding: 0 5px;
+        }
+
+        input:focus + label,
+        input:not(:placeholder-shown) + label {
+            top: -10px;
+            left: 15px;
+            font-size: 0.8rem;
+            color: var(--green);
+            background: var(--navy);
+        }
+
+        .btn {
+            background: linear-gradient(to right, var(--green), var(--purple));
+            color: var(--navy);
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            width: 100%;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(100, 255, 218, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, var(--purple), var(--green));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn:hover::before {
+            opacity: 1;
+        }
+
+        .link {
+            margin-top: 20px;
+            display: block;
+            color: var(--slate);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .link:hover {
+            color: var(--green);
+        }
+
+        .link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--green);
+            transition: width 0.3s ease;
+        }
+
+        .link:hover::after {
+            width: 100%;
+        }
+
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.7);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(2.5);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="night-sky" id="night-sky"></div>
+    <div class="mountains">
+        <div class="mountain" style="left: 0; width: 30%; height: 60%;"></div>
+        <div class="mountain" style="left: 25%; width: 25%; height: 50%;"></div>
+        <div class="mountain" style="left: 45%; width: 35%; height: 70%;"></div>
+        <div class="mountain" style="left: 75%; width: 25%; height: 55%;"></div>
+    </div>
+    
+    <div class="login-box">
+        <h2 class="floating">Starry Login</h2>
+        <form method="POST">
+            <div class="form-group">
+                <input type="text" name="username" id="username" placeholder=" " required>
+                <label for="username">Username</label>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" id="password" placeholder=" " required>
+                <label for="password">Password</label>
+            </div>
+            <button type="submit" class="btn">Login</button>
+        </form>
+        <a href="/signup" class="link">Don't have an account? Sign Up</a>
+    </div>
+
+    <script>
+        // Create stars
+        const nightSky = document.getElementById('night-sky');
+        const starCount = 150;
+        
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            
+            // Random size between 1px and 3px
+            const size = Math.random() * 2 + 1;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            
+            // Random position
+            star.style.left = `${Math.random() * 100}vw`;
+            star.style.top = `${Math.random() * 100}vh`;
+            
+            // Random animation duration and opacity
+            const duration = Math.random() * 5 + 3;
+            const opacity = Math.random() * 0.7 + 0.3;
+            star.style.setProperty('--duration', `${duration}s`);
+            star.style.setProperty('--opacity', opacity);
+            
+            // Random delay
+            star.style.animationDelay = `${Math.random() * 5}s`;
+            
+            nightSky.appendChild(star);
+        }
+
+        // Create shooting stars
+        function createShootingStar() {
+            const shootingStar = document.createElement('div');
+            shootingStar.classList.add('shooting-star');
+            
+            // Random starting position (top part of screen)
+            const startX = Math.random() * 100;
+            const startY = Math.random() * 40;
+            shootingStar.style.left = `${startX}vw`;
+            shootingStar.style.top = `${startY}vh`;
+            
+            // Random distance and angle
+            const distance = Math.random() * 30 + 20;
+            const angle = Math.random() * Math.PI / 4 + Math.PI / 8;
+            const distanceX = distance * Math.cos(angle);
+            const distanceY = distance * Math.sin(angle);
+            
+            shootingStar.style.setProperty('--shoot-distance-x', `${distanceX}vw`);
+            shootingStar.style.setProperty('--shoot-distance-y', `${distanceY}vh`);
+            
+            // Random duration
+            const duration = Math.random() * 2 + 1;
+            shootingStar.style.setProperty('--shoot-duration', `${duration}s`);
+            
+            nightSky.appendChild(shootingStar);
+            
+            // Remove after animation completes
+            setTimeout(() => {
+                shootingStar.remove();
+            }, duration * 1000);
+        }
+        
+        // Create shooting stars periodically
+        setInterval(createShootingStar, 2000);
+        
+        // Initial shooting stars
+        for (let i = 0; i < 3; i++) {
+            setTimeout(createShootingStar, i * 500);
+        }
+
+        // Add ripple effect to button
+        const button = document.querySelector('.btn');
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const ripple = document.createElement('span');
+            ripple.classList.add('ripple');
+            this.appendChild(ripple);
+            
+            const x = e.clientX - e.target.getBoundingClientRect().left;
+            const y = e.clientY - e.target.getBoundingClientRect().top;
+            
+            ripple.style.left = `${x}px`;
+            ripple.style.top = `${y}px`;
+            
+            setTimeout(() => {
+                ripple.remove();
+                // Submit the form after animation
+                this.closest('form').submit();
+            }, 600);
+        });
+
+        // Add focus animation to inputs
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.querySelector('label').style.color = 'var(--green)';
+            });
+            
+            input.addEventListener('blur', function() {
+                if (!this.value) {
+                    this.parentElement.querySelector('label').style.color = 'var(--slate)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

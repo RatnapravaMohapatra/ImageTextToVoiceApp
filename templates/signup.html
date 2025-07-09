@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-light: #a29bfe;
+            --secondary: #00cec9;
+            --accent: #fd79a8;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: float linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .signup-box {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            width: 380px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            transform-style: preserve-3d;
+            transform: perspective(500px);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .signup-box:hover {
+            transform: perspective(500px) translateY(-5px) rotateX(2deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: perspective(500px) translateY(20px) rotateX(10deg);
+            }
+            to {
+                opacity: 1;
+                transform: perspective(500px) translateY(0) rotateX(0);
+            }
+        }
+
+        h2 {
+            color: var(--dark);
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 3px;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #dfe6e9;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: rgba(223, 230, 233, 0.2);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+        }
+
+        label {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            color: #636e72;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            background: white;
+            padding: 0 5px;
+        }
+
+        input:focus + label,
+        input:not(:placeholder-shown) + label {
+            top: -10px;
+            left: 15px;
+            font-size: 0.8rem;
+            color: var(--primary);
+            background: white;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            width: 100%;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::after {
+            left: 100%;
+        }
+
+        .link {
+            margin-top: 20px;
+            display: block;
+            color: #636e72;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .link:hover {
+            color: var(--primary);
+        }
+
+        .link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .link:hover::after {
+            width: 100%;
+        }
+
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .decoration {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(253, 121, 168, 0.1) 0%, rgba(253, 121, 168, 0) 70%);
+            z-index: -1;
+        }
+
+        .decoration-1 {
+            top: -50px;
+            right: -50px;
+            animation: pulse 4s ease infinite;
+        }
+
+        .decoration-2 {
+            bottom: -80px;
+            left: -80px;
+            width: 300px;
+            height: 300px;
+            animation: pulse 5s ease infinite 1s;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.3;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles"></div>
+    
+    <div class="signup-box">
+        <div class="decoration decoration-1"></div>
+        <div class="decoration decoration-2"></div>
+        
+        <h2 class="floating">Create Account</h2>
+        <form method="POST">
+            <div class="form-group">
+                <input type="text" name="username" id="username" placeholder=" " required>
+                <label for="username">Username</label>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" id="password" placeholder=" " required>
+                <label for="password">Password</label>
+            </div>
+            <button type="submit" class="btn">Sign Up</button>
+        </form>
+        <a href="/login" class="link">Already have an account? Log In</a>
+    </div>
+
+    <script>
+        // Create floating particles
+        const particlesContainer = document.querySelector('.particles');
+        const particleCount = 30;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            // Random size between 2px and 6px
+            const size = Math.random() * 4 + 2;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            // Random position
+            particle.style.left = `${Math.random() * 100}vw`;
+            particle.style.top = `${Math.random() * 100}vh`;
+            
+            // Random animation duration and delay
+            const duration = Math.random() * 10 + 10;
+            const delay = Math.random() * 5;
+            particle.style.animationDuration = `${duration}s`;
+            particle.style.animationDelay = `${delay}s`;
+            
+            // Random opacity
+            particle.style.opacity = Math.random() * 0.5 + 0.3;
+            
+            particlesContainer.appendChild(particle);
+        }
+
+        // Add ripple effect to button
+        const button = document.querySelector('.btn');
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const ripple = document.createElement('span');
+            ripple.classList.add('ripple');
+            this.appendChild(ripple);
+            
+            const x = e.clientX - e.target.getBoundingClientRect().left;
+            const y = e.clientY - e.target.getBoundingClientRect().top;
+            
+            ripple.style.left = `${x}px`;
+            ripple.style.top = `${y}px`;
+            
+            setTimeout(() => {
+                ripple.remove();
+                // Submit the form after animation
+                this.closest('form').submit();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
