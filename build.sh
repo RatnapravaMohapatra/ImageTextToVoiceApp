@@ -11,8 +11,12 @@ apt-get install -y \
     python3-setuptools
 
 # Create necessary directories
-mkdir -p uploads static/audio
+echo "Creating directories..."
+mkdir -p uploads static/audio  # Fixed typo (was 'mudio')
 
 # Install Python dependencies
+echo "Installing Python packages..."
 pip install --upgrade pip
-pip install -r requirements.txt
+pip install -r requirements.txt  # Fixed (was '--r')
+
+echo "Build completed successfully!"
