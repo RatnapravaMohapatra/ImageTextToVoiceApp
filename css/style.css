@@ -1,0 +1,113 @@
+/* --- Login, Signup, Upload Custom UI --- */
+
+.login-box, .signup-box, .upload-box {
+    position: relative;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px 40px;
+    border-radius: 20px;
+    max-width: 400px;
+    margin: 100px auto;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.login-box h2,
+.signup-box h2,
+.upload-box h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.login-box input,
+.signup-box input,
+.upload-box input {
+    width: 100%;
+    padding: 10px;
+    margin: 12px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.login-box .btn,
+.signup-box .btn,
+.upload-box .btn {
+    background: #8e44ad;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.3s ease-in-out;
+}
+
+.login-box .btn:hover,
+.signup-box .btn:hover,
+.upload-box .btn:hover {
+    background: #732d91;
+}
+
+.upload-box p {
+    font-size: 14px;
+    margin-bottom: 20px;
+    color: #444;
+}
+
+.upload-box input[type="file"] {
+    border: none;
+    margin-bottom: 20px;
+}
+
+.link {
+    display: block;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #555;
+    text-decoration: none;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+.logout {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    z-index: 2;
+}
+
+/* Snowfall animation dots */
+
+.snow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.snow div {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: white;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(100vh);
+        opacity: 0;
+    }
+}

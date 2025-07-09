@@ -1,0 +1,114 @@
+<!-- templates/result.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Text Extraction Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #ffe9d6, #fff3e6);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .result-container {
+            max-width: 800px;
+            margin: 60px auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #e67e22;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .result-section {
+            background: #fff7f0;
+            border-left: 8px solid #f39c12;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        .result-section h3 {
+            color: #d35400;
+            margin-bottom: 10px;
+        }
+
+        .result-text {
+            font-size: 16px;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        form {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        input[type="submit"] {
+            background-color: #e67e22;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #cf711f;
+        }
+
+        a {
+            display: inline-block;
+            text-align: center;
+            margin-top: 20px;
+            color: #e67e22;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="result-container">
+        <h2>Text Extraction Result</h2>
+
+        <div class="result-section">
+            <h3>Extracted Text</h3>
+            <div class="result-text">
+                {{ extracted_text }}
+            </div>
+        </div>
+
+        <div class="result-section">
+            <h3>Translated Texts</h3>
+            {% for lang, translation in translated_texts.items() %}
+                <div class="result-text">
+                    <strong>{{ lang }}:</strong><br>
+                    {{ translation }}
+                </div>
+                <hr style="border: none; border-top: 1px dashed #ddd; margin: 15px 0;">
+            {% endfor %}
+        </div>
+
+        <form action="/audio" method="POST">
+            <input type="hidden" name="text" value="{{ extracted_text }}">
+            <input type="submit" value="Generate Audio 🎧">
+        </form>
+
+        <a href="/upload">⬅ Back to Upload</a>
+    </div>
+</body>
+</html>
